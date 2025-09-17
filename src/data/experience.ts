@@ -22,6 +22,19 @@ export interface CertificationItem {
 
 export const experience: ExperienceItem[] = [
   {
+    title: 'Founder & Director',
+    company: 'Bonehead Labs',
+    period: 'Sep 2025 — Present',
+    summary:
+      'Founder and director overseeing all development and company operations across games, tooling, and research.',
+    achievements: [
+      'Developed three playable game demos to validate core mechanics and direction.',
+      'Built and launched the official company website.',
+      'Implemented a project management system using Notion to streamline delivery.',
+      'More to come.'
+    ]
+  },
+  {
     title: 'Analytics Engineer',
     company: 'Service Stream',
     period: 'Jul 2025 — Present',

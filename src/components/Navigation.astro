@@ -1,13 +1,13 @@
 ---
 const { active } = Astro.props as { active?: string };
 const links = [
-  { href: '/', label: 'Home', id: 'home' },
-  { href: '/#about', label: 'About', id: 'about' },
-  { href: '/#tech', label: 'Tech', id: 'tech' },
-  { href: '/#projects', label: 'Projects', id: 'projects' },
-  { href: '/#bonehead', label: 'Bonehead Labs', id: 'bonehead' },
-  { href: '/#contact', label: 'Contact', id: 'contact' },
-  { href: '/blog', label: 'Blog', id: 'blog' }
+  { href: '/', label: 'Home', id: 'home', icon: 'mdi:home-outline' },
+  { href: '/#about', label: 'About', id: 'about', icon: 'mdi:account-outline' },
+  { href: '/#tech', label: 'Tech', id: 'tech', icon: 'mdi:chip' },
+  { href: '/#projects', label: 'Projects', id: 'projects', icon: 'mdi:folder-star-outline' },
+  { href: '/#bonehead', label: 'Bonehead Labs', id: 'bonehead', hasLogo: true },
+  { href: '/#contact', label: 'Contact', id: 'contact', icon: 'mdi:message-text' },
+  { href: '/blog', label: 'Blog', id: 'blog', icon: 'mdi:book-open-page-variant-outline' }
 ];
 ---
 <header class="fixed inset-x-0 top-0 z-30 px-6 py-5 md:px-10 lg:px-16">
@@ -23,12 +23,17 @@ const links = [
         {links.map((link) => (
           <li>
             <a
-              class={`relative px-2 py-1 transition hover:text-white ${
+              class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
                 active === link.id ? 'text-white' : ''
               }`}
               href={link.href}
             >
               {active === link.id && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+              {link.hasLogo ? (
+                <img src="/images/bonehead_labs_logo.png" alt="Bonehead Labs" class="h-4 w-4 rounded object-contain" loading="lazy" />
+              ) : link.icon && (
+                <iconify-icon icon={link.icon} width="16" height="16" class="text-white/60"></iconify-icon>
+              )}
               {link.label}
             </a>
           </li>

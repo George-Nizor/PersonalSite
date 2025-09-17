@@ -1,4 +1,4 @@
-<section id="home" class="hero-shell relative mx-auto flex max-w-6xl flex-col-reverse gap-10 overflow-hidden rounded-3xl border-2 border-gradient bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20 px-8 py-16 lg:flex-row lg:items-center md:px-12">
+<section id="home" class="hero-shell relative mx-auto flex max-w-6xl flex-col-reverse gap-10 overflow-hidden rounded-3xl border-2 border-gradient bg-gradient-to-br from-cyan-900/20 via-blue-900/20 to-teal-900/20 px-8 py-16 lg:flex-row lg:items-center md:px-12">
   <!-- Animated background elements -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="hero-orb hero-orb-1"></div>
@@ -24,8 +24,8 @@
       Hello and Welcome! I'm George Nizoridis.
     </h2>
     <p class="mt-6 max-w-xl text-lg text-white/80">
-      I'm an analytics engineer at Service Stream, passionate about building end to end data solutions, AI Engineering, and Game Development. I consistently deliver benefits to my team and stakeholders.
-      I'm also the founder of <a class="underline decoration-blue-400 underline-offset-2 transition hover:decoration-purple-400" href="https://boneheadlabs.org/" target="_blank" rel="noopener">Bonehead Labs</a>, my own software company producing video games, open source tools, and research.
+      I'm an analytics engineer at Service Stream, passionate about building end to end data solutions, AI Engineering, and Game Development. I consistently deliver benefits to my team and stakeholders.<br/>
+      I'm also the founder and director of <a class="font-semibold text-white underline decoration-cyan-400 underline-offset-2 transition hover:decoration-teal-400" href="https://boneheadlabs.org/" target="_blank" rel="noopener">Bonehead Labs</a>, my own software company producing video games, open source tools, and research.
     </p>
     <div class="mt-10 flex flex-wrap items-center gap-4">
       <a class="hero-btn hero-btn-primary group" href="#projects">
@@ -37,7 +37,7 @@
       </a>
       <a class="hero-btn hero-btn-secondary group" href="#bonehead">
         <span class="relative z-10 flex items-center gap-2">
-          <iconify-icon icon="mdi:rocket-launch-outline" width="16" height="16"></iconify-icon>
+          <img src="/images/bonehead_labs_logo.png" alt="Bonehead Labs" class="h-4 w-4 rounded object-contain" loading="lazy" />
           Bonehead Labs
           <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">↗</span>
         </span>
@@ -55,7 +55,7 @@
   <div class="relative z-10 flex-1" data-reveal>
     <figure class="portrait-container relative mx-auto max-w-md md:max-w-lg overflow-hidden rounded-[3rem] border-2 border-white/20 shadow-glow">
       <img src="/images/Main_Portrait.webp" alt="Portrait of George Nizoridis" class="w-full object-cover" loading="lazy" />
-      <figcaption class="absolute bottom-6 left-0 right-0 mx-auto flex max-w-[80%] items-center justify-between rounded-full bg-gradient-to-r from-blue-500/80 to-purple-500/80 backdrop-blur-sm px-4 py-3 text-xs uppercase tracking-[0.3em] text-white shadow-lg">
+      <figcaption class="absolute bottom-6 left-0 right-0 mx-auto flex max-w-[80%] items-center justify-between rounded-full bg-gradient-to-r from-cyan-500/80 to-teal-500/80 backdrop-blur-sm px-4 py-3 text-xs uppercase tracking-[0.3em] text-white shadow-lg">
         Developer  · Founder  · Creative
       </figcaption>
     </figure>
@@ -68,7 +68,7 @@
   }
   
   .border-gradient {
-    border-color: rgba(59, 130, 246, 0.4);
+    border-color: rgba(6, 182, 212, 0.4);
   }
   
   .hero-orb {
@@ -81,7 +81,7 @@
   .hero-orb-1 {
     width: 300px;
     height: 300px;
-    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(45deg, #06b6d4, #0891b2);
     top: -80px;
     left: -80px;
     animation: hero-float-1 12s ease-in-out infinite;
@@ -90,7 +90,7 @@
   .hero-orb-2 {
     width: 200px;
     height: 200px;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
+    background: linear-gradient(135deg, #0891b2, #0d9488);
     bottom: -60px;
     right: -60px;
     animation: hero-float-2 10s ease-in-out infinite reverse;
@@ -99,7 +99,7 @@
   .hero-orb-3 {
     width: 160px;
     height: 160px;
-    background: linear-gradient(90deg, #1d4ed8, #7c3aed);
+    background: linear-gradient(90deg, #0e7490, #0f766e);
     top: 50%;
     right: 20%;
     animation: hero-float-3 14s ease-in-out infinite;
@@ -109,7 +109,7 @@
     position: absolute;
     width: 3px;
     height: 3px;
-    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    background: linear-gradient(45deg, #22d3ee, #5eead4);
     border-radius: 50%;
     opacity: 0.8;
   }
@@ -148,15 +148,15 @@
   }
   
   .hero-btn-primary {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
     border: 1px solid rgba(255,255,255,0.3);
     color: white;
-    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.3);
   }
   
   .hero-btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 12px 40px rgba(6, 182, 212, 0.4);
   }
   
   .hero-btn-secondary {
@@ -178,8 +178,8 @@
   }
   
   @keyframes hero-pulse {
-    0%, 100% { border-color: rgba(59, 130, 246, 0.4); }
-    50% { border-color: rgba(139, 92, 246, 0.6); }
+    0%, 100% { border-color: rgba(6, 182, 212, 0.4); }
+    50% { border-color: rgba(20, 184, 166, 0.6); }
   }
   
   @keyframes hero-float-1 {
@@ -204,7 +204,7 @@
   }
   
   @keyframes portrait-glow {
-    0% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); }
-    100% { box-shadow: 0 0 50px rgba(139, 92, 246, 0.5); }
+    0% { box-shadow: 0 0 30px rgba(6, 182, 212, 0.3); }
+    100% { box-shadow: 0 0 50px rgba(20, 184, 166, 0.5); }
   }
 </style>

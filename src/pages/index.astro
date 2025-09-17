@@ -11,14 +11,27 @@ import LatestPosts from '~/components/LatestPosts.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
+const parseDateFromSlug = (slug: string) => {
+  // Expect formats like 2024-04-title; fallback to publishDate
+  const match = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return null;
+  const [_, y, m, d] = match;
+  return new Date(Number(y), Number(m) - 1, Number(d));
+};
+
 const posts = allPosts
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .sort((a, b) => {
+    const ad = parseDateFromSlug(a.slug) ?? a.data.date ?? a.data.publishDate;
+    const bd = parseDateFromSlug(b.slug) ?? b.data.date ?? b.data.publishDate;
+    return bd.getTime() - ad.getTime();
+  })
   .slice(0, 2);
 ---
 <BaseLayout page="home" description="Portfolio of George Nizoridis—analytics engineer, AI tinkerer, and founder of Bonehead Labs.">
   <Hero />
   <About />
+  <Experience />
   <TechStack />
   <Projects />
   <BoneheadShowcase />

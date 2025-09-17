@@ -1,11 +1,11 @@
 ---
 title: "Generative Analytics Copilots That Ship"
-description: "Lessons from pairing LangChain agents with governed BI to accelerate insight loops."
-publishDate: 2024-03-02
-tags:
-  - Generative AI
-  - Power BI
-  - LangChain
+date: "2024-03-02"
+excerpt: "Lessons from pairing LangChain agents with governed BI to accelerate insight loops."
+tags: ["Generative AI", "Power BI", "LangChain"]
+readTime: "3 min read"
+image: "/images/Bonehead-labs-banner.png"
+author: "George Nizoridis"
 ---
 
 There is a gap between a clever LLM demo and an AI product that analysts trust. Closing it requires governance, telemetry, and a relentless focus on the UX.

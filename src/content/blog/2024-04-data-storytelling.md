@@ -1,11 +1,11 @@
 ---
 title: "Designing Fabric Narratives"
-description: "A playbook for blending Microsoft Fabric models with human-first storytelling."
-publishDate: 2024-04-15
-hero: "/images/Bonehead-labs-banner.png"
-tags:
-  - Microsoft Fabric
-  - Storytelling
+date: "2024-04-15"
+excerpt: "A playbook for blending Microsoft Fabric models with human-first storytelling."
+tags: ["Microsoft Fabric", "Storytelling"]
+readTime: "4 min read"
+image: "/images/Bonehead-labs-banner.png"
+author: "George Nizoridis"
 ---
 
 Every analytics leader wants their stakeholders to *feel* the insight. Inside Microsoft Fabric, that starts by treating each semantic model like a narrative arc rather than a warehouse relic.

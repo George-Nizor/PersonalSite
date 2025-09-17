@@ -2,37 +2,189 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog'))
+const all = await getCollection('blog');
+const parseDateFromSlug = (slug: string) => {
+  const match = slug.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return null;
+  const [_, y, m, d] = match;
+  return new Date(Number(y), Number(m) - 1, Number(d));
+};
+
+const posts = all
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+  .sort((a, b) => {
+    const ad = parseDateFromSlug(a.slug) ?? a.data.date ?? a.data.publishDate;
+    const bd = parseDateFromSlug(b.slug) ?? b.data.date ?? b.data.publishDate;
+    return bd.getTime() - ad.getTime();
+  });
 ---
 <BaseLayout page="blog" title="Blog · George Nizoridis" description="Field notes on analytics engineering, AI experiments, and product craft.">
-  <section class="mx-auto max-w-5xl" data-reveal>
-    <header class="section-shell px-8 py-12 text-center">
-      <p class="text-xs uppercase tracking-[0.4em] text-sand/60">Ideas in Motion</p>
-      <h1 class="mt-4 text-4xl font-bold text-white">Blog</h1>
-      <p class="mx-auto mt-4 max-w-2xl text-base text-sand/70">
-        Essays, launch notes, and behind-the-scenes explorations of how analytics systems, AI agents, and data storytelling collide.
-      </p>
-    </header>
+  <section class="mx-auto mt-24 max-w-6xl" data-reveal>
+    <div class="blog-shell relative overflow-hidden rounded-3xl border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-900/20 via-green-900/20 to-teal-900/20 px-8 py-12 md:px-12">
+      <!-- Animated background elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="blog-orb blog-orb-1"></div>
+        <div class="blog-orb blog-orb-2"></div>
+        <div class="blog-orb blog-orb-3"></div>
+      </div>
+      
+      <!-- Floating particles -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="blog-particle blog-particle-1"></div>
+        <div class="blog-particle blog-particle-2"></div>
+        <div class="blog-particle blog-particle-3"></div>
+        <div class="blog-particle blog-particle-4"></div>
+        <div class="blog-particle blog-particle-5"></div>
+      </div>
+
+      <div class="relative z-10 text-center">
+        <h1 class="flex items-center justify-center gap-3 text-4xl font-semibold text-white md:text-5xl">
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-green-500 shadow-lg">
+            <iconify-icon icon="mdi:book-open-page-variant-outline" width="24" height="24" class="text-white"></iconify-icon>
+          </span>
+          My Blog
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-white/80">
+          For discussions on technologies, techniques, and projects, check out my blog!
+        </p>
+      </div>
+    </div>
   </section>
-  <section class="mx-auto mt-16 grid max-w-5xl gap-8" data-reveal>
-    {posts.map((post) => (
-      <article class="rounded-3xl border border-white/10 bg-white/5 p-8 transition hover:border-accent/40 hover:bg-white/10">
-        <p class="text-xs uppercase tracking-[0.3em] text-sand/50">{post.data.publishDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-        <h2 class="mt-3 text-3xl font-semibold text-white">
-          <a href={`/blog/${post.slug}`}>{post.data.title}</a>
-        </h2>
-        <p class="mt-3 text-sm text-sand/70">{post.data.description}</p>
-        <div class="mt-4 flex flex-wrap gap-2 text-xs text-sand/60">
-          {post.data.tags.map((tag) => (
-            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">{tag}</span>
-          ))}
-        </div>
-      </article>
-    ))}
+  
+  <section class="mx-auto mt-16 max-w-6xl px-8" data-reveal>
+    <div class="grid gap-8 lg:grid-cols-2">
+      {posts.map((post) => (
+        <a href={`/blog/${post.slug}`} class="block group">
+          <article class="blog-post-card relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition-all duration-300 hover:border-emerald-400/30 hover:bg-white/10">
+            {post.data.image && (
+              <div class="aspect-video w-full overflow-hidden">
+                <img 
+                  src={post.data.image} 
+                  alt={post.data.title} 
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="p-6">
+              <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-emerald-300/70">
+                <span>{(post.data.date ?? post.data.publishDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                {post.data.readTime && <span>{post.data.readTime}</span>}
+              </div>
+              <h2 class="mt-3 text-2xl font-semibold text-white group-hover:text-emerald-100 transition-colors">
+                {post.data.title}
+              </h2>
+              <p class="mt-3 text-sm text-white/70">{post.data.excerpt ?? post.data.description}</p>
+              {post.data.author && (
+                <p class="mt-3 text-xs text-emerald-300/60">by {post.data.author}</p>
+              )}
+              <div class="mt-4 flex flex-wrap gap-2 text-xs text-white/60">
+                {post.data.tags.map((tag) => (
+                  <span class="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-emerald-200/80">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        </a>
+      ))}
+    </div>
     {posts.length === 0 && (
-      <p class="text-center text-sm text-sand/60">Add a Markdown file to <code>src/content/blog</code> to publish a post.</p>
+      <p class="text-center text-sm text-white/60">Add a Markdown file to <code>src/content/blog</code> to publish a post.</p>
     )}
   </section>
 </BaseLayout>
+
+<style>
+  .blog-shell {
+    animation: blog-pulse 5s ease-in-out infinite;
+  }
+  
+  .blog-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.5;
+  }
+  
+  .blog-orb-1 {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(45deg, #10b981, #059669);
+    top: -60px;
+    left: -60px;
+    animation: blog-float-1 10s ease-in-out infinite;
+  }
+  
+  .blog-orb-2 {
+    width: 180px;
+    height: 180px;
+    background: linear-gradient(135deg, #059669, #047857);
+    bottom: -50px;
+    right: -50px;
+    animation: blog-float-2 8s ease-in-out infinite reverse;
+  }
+  
+  .blog-orb-3 {
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(90deg, #047857, #065f46);
+    top: 60%;
+    right: 15%;
+    animation: blog-float-3 12s ease-in-out infinite;
+  }
+  
+  .blog-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: linear-gradient(45deg, #34d399, #10b981);
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+  
+  .blog-particle-1 { top: 25%; left: 20%; animation: blog-particle-float 4.5s ease-in-out infinite; }
+  .blog-particle-2 { top: 70%; left: 70%; animation: blog-particle-float 3.8s ease-in-out infinite 0.8s; }
+  .blog-particle-3 { top: 45%; right: 25%; animation: blog-particle-float 5.2s ease-in-out infinite 1.2s; }
+  .blog-particle-4 { top: 15%; right: 40%; animation: blog-particle-float 4.1s ease-in-out infinite 2s; }
+  .blog-particle-5 { bottom: 25%; left: 40%; animation: blog-particle-float 3.6s ease-in-out infinite 0.4s; }
+  
+  .blog-post-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .blog-post-card:hover::before {
+    opacity: 1;
+  }
+  
+  @keyframes blog-pulse {
+    0%, 100% { border-color: rgba(16, 185, 129, 0.3); }
+    50% { border-color: rgba(5, 150, 105, 0.5); }
+  }
+  
+  @keyframes blog-float-1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(35px, -25px) rotate(120deg); }
+    66% { transform: translate(-25px, 35px) rotate(240deg); }
+  }
+  
+  @keyframes blog-float-2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-45px, -35px) rotate(180deg); }
+  }
+  
+  @keyframes blog-float-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(25px, -45px) scale(1.1); }
+  }
+  
+  @keyframes blog-particle-float {
+    0%, 100% { transform: translateY(0px) opacity(0.7); }
+    50% { transform: translateY(-20px) opacity(1); }
+  }
+</style>

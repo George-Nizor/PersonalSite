@@ -4,11 +4,17 @@ const blog = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string().max(160),
-    publishDate: z.coerce.date(),
-    hero: z.string().optional(),
+    date: z.coerce.date(),
+    excerpt: z.string(),
     tags: z.array(z.string()).default([]),
-    draft: z.boolean().default(false)
+    readTime: z.string(),
+    image: z.string().optional(),
+    author: z.string(),
+    draft: z.boolean().default(false),
+    // Legacy support
+    description: z.string().optional(),
+    publishDate: z.coerce.date().optional(),
+    hero: z.string().optional()
   })
 });
 
