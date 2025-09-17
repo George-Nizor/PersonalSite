@@ -30,11 +30,26 @@ const posts = allPosts
 ---
 <BaseLayout page="home" description="Portfolio of George Nizoridis—analytics engineer, AI tinkerer, and founder of Bonehead Labs.">
   <Hero />
-  <About />
-  <Experience />
-  <TechStack />
-  <Projects />
-  <BoneheadShowcase />
-  <LatestPosts posts={posts} />
+  <div class="gradient-divider mx-auto max-w-6xl mt-12"></div>
+  
+  <!-- Main content with vertical dividers -->
+  <div class="relative mx-auto max-w-6xl">
+    <!-- Left vertical divider -->
+    <div class="gradient-divider-vertical absolute left-0 top-0 bottom-0 hidden lg:block"></div>
+    <!-- Right vertical divider -->
+    <div class="gradient-divider-vertical absolute right-0 top-0 bottom-0 hidden lg:block"></div>
+    
+    <!-- Content -->
+    <div class="px-4 lg:px-8">
+      <About />
+      <Experience />
+      <TechStack />
+      <Projects />
+      <BoneheadShowcase />
+      <LatestPosts posts={posts} />
+    </div>
+  </div>
+  
+  <div class="gradient-divider mx-auto max-w-6xl mt-12"></div>
   <Contact />
 </BaseLayout>
