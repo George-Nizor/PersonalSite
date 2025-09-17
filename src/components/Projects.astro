@@ -1,10 +1,21 @@
 ---
 const fetchRepo = async (fullName: string) => {
   try {
-    const res = await fetch(`https://api.github.com/repos/${fullName}`);
-    if (!res.ok) return null;
+    const token = (import.meta as any)?.env?.GITHUB_TOKEN || process?.env?.GITHUB_TOKEN;
+    const headers: Record<string, string> = {
+      'Accept': 'application/vnd.github+json',
+      'User-Agent': 'GeorgeNizoridis-PersonalSite',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`https://api.github.com/repos/${fullName}` , { headers, cache: 'no-store' });
+    if (!res.ok) {
+      console.warn('GitHub API error for', fullName, res.status, res.statusText, 'remaining:', res.headers.get('x-ratelimit-remaining'));
+      return null;
+    }
     return (await res.json()) as any;
-  } catch {
+  } catch (err) {
+    console.error('GitHub fetch failed for', fullName, err);
     return null;
   }
 };
@@ -18,9 +29,91 @@ const reposToFetch = [
   'Bonehead-Labs/bonehead-labs-official-systems'
 ];
 
-const repoData = await Promise.all(reposToFetch.map(fetchRepo));
+const fetched = await Promise.all(reposToFetch.map(fetchRepo));
+const repoData = reposToFetch.map((fullName, idx) => {
+  const repo = fetched[idx];
+  if (repo && repo.name) return repo;
+  const namePart = fullName.split('/')[1] ?? fullName;
+  return {
+    full_name: fullName,
+    name: namePart.replace(/[-_]/g, ' '),
+    description: undefined,
+    language: undefined,
+    stargazers_count: undefined,
+    html_url: `https://github.com/${fullName}`
+  } as any;
+});
 
-const getImageFor = (repo: any) => (repo?.owner?.login === 'Bonehead-Labs' ? '/images/Bonehead-labs-banner.png' : '/images/Secondary_Portrait.webp');
+const repoMeta: Record<string, { category: string; problem: string; tech: string; benefits: string }> = {
+  'George-Nizor/Binary-Image-Classification': {
+    category: 'Machine-Learning',
+    problem: 'Classify images into two categories with high accuracy.',
+    tech: 'Python, TensorFlow, Keras, Pillow',
+    benefits: 'Reliable binary predictions for downstream decisions. Used in contract to save time and money.'
+  },
+  'George-Nizor/ML-Project-Heart-attack': {
+    category: 'Machine-Learning',
+    problem: 'Estimate heart-attack risk from patient attributes.',
+    tech: 'Python, scikit-learn, Pandas, model evaluation/ROC-AUC',
+    benefits: 'Refined Machine learning pipeline understanding.'
+  },
+  'Bonehead-Labs/frontier-model-framework': {
+    category: 'AI-Engineering',
+    problem: 'Orchestrate LLM components for end-to-end use-cases.',
+    tech: 'Python, AWS Bedrock, Azure OpenAI, LangChain, Microsoft Graph API, Boto3',
+    benefits: 'Used to rapidly prototype and deploy Managed service LLM powered applications.'
+  },
+  'Bonehead-Labs/PBIP-Factory': {
+    category: 'Analytics-Engineering',
+    problem: 'Automate replication of Power BI reports using Master Template and CLI tool',
+    tech: 'Python, TMDL, Power BI PBIP',
+    benefits: 'Improved Analytics Workflow via automation driven efficiency.'
+  },
+  'Bonehead-Labs/BoneheadLabsSite': {
+    category: 'Web-Development',
+    problem: 'Publish a fast, content-focused site for the lab.',
+    tech: 'React, Tailwind CSS',
+    benefits: 'Visually appealing and functional website representing the Bonehead Labs brand.'
+  },
+  'Bonehead-Labs/bonehead-labs-official-systems': {
+    category: 'Game Development | Open Source',
+    problem: 'Open source re-usable game modules compatible with the Godot Engine',
+    tech: 'Godot, GDScript',
+    benefits: 'Accelerates game development by providing a library of reusable modules, and provides value to the community.'
+  }
+};
+
+const categoryIconMap: Record<string, string> = {
+  'AI-Engineering': 'mdi:robot-outline',
+  'Machine-Learning': 'mdi:brain',
+  'Analytics-Engineering': 'mdi:chart-box-outline',
+  'Web-Development': 'mdi:web',
+  'Web-Engineering': 'mdi:web',
+  'Platform-Engineering': 'mdi:server-cog-outline',
+  'Data-Architecture': 'mdi:database-cog-outline',
+  'Data-Modeling': 'mdi:table-pivot',
+  'Game Development | Open Source': 'mdi:gamepad-variant-outline'
+};
+
+const languageIconMap: Record<string, string> = {
+  'Python': 'logos:python',
+  'TypeScript': 'logos:typescript-icon',
+  'JavaScript': 'logos:javascript',
+  'Jupyter Notebook': 'logos:jupyter',
+  'GDScript': 'logos:godot-icon',
+  'HTML': 'logos:html-5',
+  'CSS': 'logos:css-3'
+};
+
+const getIconForRepo = (repo: any): string => {
+  const category = repoMeta[repo?.full_name]?.category;
+  if (category && categoryIconMap[category]) return categoryIconMap[category];
+  const language = repo?.language;
+  if (language && languageIconMap[language]) return languageIconMap[language];
+  return 'mdi:folder-outline';
+};
+
+const getIconForCategory = (category: string): string => categoryIconMap[category] ?? 'mdi:folder-outline';
 ---
 <section id="projects" class="mx-auto mt-24 max-w-6xl">
   <div class="section-shell relative border-2 border-white/20 px-8 py-12 md:px-12" data-reveal>
@@ -29,48 +122,60 @@ const getImageFor = (repo: any) => (repo?.owner?.login === 'Bonehead-Labs' ? '/i
         <h2 class="text-3xl font-semibold text-white md:text-4xl">My Projects</h2>
         <p class="mt-2 max-w-2xl text-white/70">A fuller list of things I've built or shipped. Click to expand and scroll through.</p>
       </div>
-      <button id="toggle-projects" class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white">
+      <button id="toggle-projects" type="button" aria-controls="projects-container" aria-expanded="false" class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white cursor-pointer z-10 relative" style="pointer-events: auto !important;">
         <span id="toggle-text">Show projects</span> <span id="toggle-icon">↓</span>
       </button>
     </header>
 
-    <div id="projects-container" class="mt-8 hidden overflow-hidden rounded-xl border border-white/10 bg-white/5" data-reveal>
+    <div id="projects-container" class="mt-8 hidden rounded-xl border border-white/10 bg-white/5" data-reveal>
       <div class="flex items-center justify-between border-b border-white/10 px-4 py-2 text-xs text-white/60">
         <span>Scroll to see all projects</span>
         <span id="project-counter">1 of 10</span>
       </div>
       <div id="projects-list" class="h-96 space-y-4 overflow-y-auto p-4" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.3) transparent;">
         <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
-            <img src="/images/Secondary_Portrait.webp" alt="AI evidence validation" class="h-full w-full object-cover" loading="lazy" />
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+            <iconify-icon icon={getIconForCategory('AI-Engineering')} width="48" height="48" class="text-white/80"></iconify-icon>
           </div>
           <div class="flex-1">
-            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · AI</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-white/60">AI-Engineering</p>
             <h3 class="mt-1 text-lg font-semibold text-white">🔒 A.I Evidence Validation</h3>
-            <p class="mt-1 text-sm text-white/75">Multi‑modal LLM system that assesses evidence against complex requirements at scale.</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
+              <li><span class="text-white/90">Problem:</span> Verify evidence against complex, multi‑step requirements at scale.</li>
+              <li><span class="text-white/90">Tech:</span> Multi‑modal LLMs, retrieval, evaluation guardrails, vector search.</li>
+              <li><span class="text-white/90">Benefits:</span> Faster compliance checks with higher consistency and traceability.</li>
+            </ul>
           </div>
         </article>
 
         <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
-            <img src="/images/Secondary_Portrait.webp" alt="AI invoice data extraction" class="h-full w-full object-cover" loading="lazy" />
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+            <iconify-icon icon={getIconForCategory('AI-Engineering')} width="48" height="48" class="text-white/80"></iconify-icon>
           </div>
           <div class="flex-1">
-            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · AI</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-white/60">AI-Engineering</p>
             <h3 class="mt-1 text-lg font-semibold text-white">🔒 A.I Invoice Data Extraction</h3>
-            <p class="mt-1 text-sm text-white/75">AWS Rekognition + Bedrock to analyse and extract invoice data into a structured database.</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
+              <li><span class="text-white/90">Problem:</span> Extract structured data from varied invoice formats reliably.</li>
+              <li><span class="text-white/90">Tech:</span> AWS Textract/Rekognition, Bedrock, parsing/validation pipeline.</li>
+              <li><span class="text-white/90">Benefits:</span> Reduced manual data entry and faster AP processing.</li>
+            </ul>
           </div>
         </article>
 
         {repoData.map((repo) => (
           <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-            <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
-              <img src={getImageFor(repo)} alt="{repo?.name ?? 'Repository'} image" class="h-full w-full object-cover" loading="lazy" />
+            <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+              <iconify-icon icon={getIconForRepo(repo)} width="48" height="48" class="text-white/80"></iconify-icon>
             </div>
             <div class="flex-1">
-              <p class="text-xs uppercase tracking-[0.3em] text-white/50">{repo?.owner?.login ?? 'GitHub'}</p>
+              <p class="text-xs uppercase tracking-[0.3em] text-white/60">{repoMeta[repo?.full_name]?.category ?? (repo?.language ?? 'Project')}</p>
               <h3 class="mt-1 text-lg font-semibold text-white">{repo?.name ?? 'Repository'}</h3>
-              <p class="mt-1 text-sm text-white/75">{repo?.description ?? 'Open‑source project.'}</p>
+              <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
+                <li><span class="text-white/90">Problem:</span> {repoMeta[repo?.full_name]?.problem ?? (repo?.description ?? 'Solves a focused user problem.')}</li>
+                <li><span class="text-white/90">Tech:</span> {repoMeta[repo?.full_name]?.tech ?? (repo?.language ?? 'Multiple')}</li>
+                <li><span class="text-white/90">Benefits:</span> {repoMeta[repo?.full_name]?.benefits ?? 'Clear value with practical outcomes.'}</li>
+              </ul>
               <div class="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
                 {repo?.language && <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">{repo.language}</span>}
                 {repo?.stargazers_count !== undefined && (<span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">★ {repo.stargazers_count}</span>)}
@@ -83,63 +188,82 @@ const getImageFor = (repo: any) => (repo?.owner?.login === 'Bonehead-Labs' ? '/i
         ))}
 
         <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
-            <img src="/images/Secondary_Portrait.webp" alt="Medallion architecture" class="h-full w-full object-cover" loading="lazy" />
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+            <iconify-icon icon={getIconForCategory('Data-Architecture')} width="48" height="48" class="text-white/80"></iconify-icon>
           </div>
           <div class="flex-1">
-            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · Architecture</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-white/60">Data-Architecture</p>
             <h3 class="mt-1 text-lg font-semibold text-white">🏛️ Medallion Architecture</h3>
-            <p class="mt-1 text-sm text-white/75">Pioneered a Fabric medallion architecture at Service Stream using lakehouses, dataflows, and notebooks (Spark SQL, T‑SQL, PySpark, Python).</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
+              <li><span class="text-white/90">Problem:</span> Standardize and govern data products across domains.</li>
+              <li><span class="text-white/90">Tech:</span> Microsoft Fabric (Lakehouse, Dataflows), Spark SQL, T‑SQL, PySpark.</li>
+              <li><span class="text-white/90">Benefits:</span> Trustworthy datasets, faster delivery, and predictable performance.</li>
+            </ul>
           </div>
         </article>
 
         <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
-            <img src="/images/Secondary_Portrait.webp" alt="Data modelling" class="h-full w-full object-cover" loading="lazy" />
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+            <iconify-icon icon={getIconForCategory('Data-Modeling')} width="48" height="48" class="text-white/80"></iconify-icon>
           </div>
           <div class="flex-1">
-            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · Data Modeling</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-white/60">Data-Modeling</p>
             <h3 class="mt-1 text-lg font-semibold text-white">🧩 Data Modelling</h3>
-            <p class="mt-1 text-sm text-white/75">DirectLake semantic models to unify and distribute complex datasets to business users with governed metrics.</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
+              <li><span class="text-white/90">Problem:</span> Provide governed, reusable metrics for varied business questions.</li>
+              <li><span class="text-white/90">Tech:</span> DirectLake, semantic models, DAX, tabular modeling, governance.</li>
+              <li><span class="text-white/90">Benefits:</span> Self‑serve analytics with consistent, single‑source metrics.</li>
+            </ul>
           </div>
         </article>
       </div>
     </div>
   </div>
 
-  <script is:inline>
-    const btn = document.getElementById('toggle-projects');
-    const container = document.getElementById('projects-container');
-    const list = document.getElementById('projects-list');
-    const icon = document.getElementById('toggle-icon');
-    const text = document.getElementById('toggle-text');
-    const counter = document.getElementById('project-counter');
-    
-    if (btn && container && list && icon && text) {
-      let open = false;
+  <script>
+    // Wait for the page to fully load
+    window.addEventListener('load', function() {
+      console.log('Page loaded, initializing projects...');
       
-      btn.addEventListener('click', () => {
-        open = !open;
-        container.classList.toggle('hidden', !open);
-        icon.textContent = open ? '↑' : '↓';
-        text.textContent = open ? 'Hide projects' : 'Show projects';
+      const btn = document.getElementById('toggle-projects');
+      const container = document.getElementById('projects-container');
+      const icon = document.getElementById('toggle-icon');
+      const text = document.getElementById('toggle-text');
+      
+      console.log('Elements found:', {
+        btn: !!btn,
+        container: !!container,
+        icon: !!icon,
+        text: !!text
       });
       
-      // Update scroll counter
-      if (list && counter) {
-        const articles = list.querySelectorAll('article');
-        const totalProjects = articles.length;
-        
-        const updateCounter = () => {
-          const scrollTop = list.scrollTop;
-          const articleHeight = articles[0]?.offsetHeight + 16; // article height + gap
-          const visibleIndex = Math.floor(scrollTop / articleHeight) + 1;
-          counter.textContent = `${Math.min(visibleIndex, totalProjects)} of ${totalProjects}`;
-        };
-        
-        list.addEventListener('scroll', updateCounter);
-        updateCounter();
+      if (!btn || !container || !icon || !text) {
+        console.error('Missing required elements');
+        return;
       }
-    }
+
+      let isOpen = false;
+      
+      btn.onclick = function(event) {
+        console.log('Button clicked! Event:', event, 'current state:', isOpen);
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+          container.style.display = 'block';
+          container.classList.remove('hidden');
+          icon.textContent = '↑';
+          text.textContent = 'Hide projects';
+        } else {
+          container.style.display = 'none';
+          container.classList.add('hidden');
+          icon.textContent = '↓';
+          text.textContent = 'Show projects';
+        }
+        
+        console.log('New state:', isOpen);
+      };
+      
+      console.log('Projects toggle initialized successfully');
+    });
   </script>
 </section>

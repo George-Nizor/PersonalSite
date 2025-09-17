@@ -6,7 +6,8 @@ export default defineConfig({
   integrations: [tailwind({ applyBaseStyles: false })],
   server: {
     watch: {
-      usePolling: true
+      usePolling: true,
+      interval: 300
     }
   }
 });
