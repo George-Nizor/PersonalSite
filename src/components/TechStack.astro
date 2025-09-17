@@ -34,20 +34,34 @@ const techItems: { label: string; icon: string }[] = [
       <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0b0b0c] to-transparent"></div>
       <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0b0b0c] to-transparent"></div>
 
-      <div class="tech-scroller will-change-transform">
-        <div class="tech-track" aria-hidden="false">
-          {techItems.map((item) => (
-            <div class="tech-pill">
-              <iconify-icon icon={item.icon} width="22" height="22" class="text-white/90"></iconify-icon>
-              <span class="text-white/85">{item.label}</span>
-            </div>
-          ))}
-          {techItems.map((item) => (
-            <div class="tech-pill" aria-hidden="true">
-              <iconify-icon icon={item.icon} width="22" height="22" class="text-white/90"></iconify-icon>
-              <span class="text-white/85">{item.label}</span>
-            </div>
-          ))}
+      <div class="tech-scroller-container relative overflow-hidden">
+        <!-- Floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="tech-particle tech-particle-1"></div>
+          <div class="tech-particle tech-particle-2"></div>
+          <div class="tech-particle tech-particle-3"></div>
+          <div class="tech-particle tech-particle-4"></div>
+        </div>
+        
+        <div class="tech-scroller will-change-transform">
+          <div class="tech-track" aria-hidden="false">
+            {techItems.map((item) => (
+              <div class="tech-pill">
+                <div class="icon-container">
+                  <iconify-icon icon={item.icon} width="22" height="22" class="text-white/90" style="display: inline-block; min-width: 22px; min-height: 22px;"></iconify-icon>
+                </div>
+                <span class="text-white/85">{item.label}</span>
+              </div>
+            ))}
+            {techItems.map((item) => (
+              <div class="tech-pill" aria-hidden="true">
+                <div class="icon-container">
+                  <iconify-icon icon={item.icon} width="22" height="22" class="text-white/90" style="display: inline-block; min-width: 22px; min-height: 22px;"></iconify-icon>
+                </div>
+                <span class="text-white/85">{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -55,13 +69,22 @@ const techItems: { label: string; icon: string }[] = [
 </section>
 
 <style>
-  .tech-scroller { padding: 6px 0; }
+  .tech-scroller-container {
+    padding: 6px 0;
+  }
+  
+  .tech-scroller { 
+    padding: 6px 0; 
+  }
+  
   .tech-track {
     display: flex;
     gap: 12px;
     width: max-content;
     animation: tech-scroll 42s linear infinite;
+    will-change: transform;
   }
+  
   .tech-pill {
     display: inline-flex;
     align-items: center;
@@ -72,9 +95,39 @@ const techItems: { label: string; icon: string }[] = [
     background: rgba(255,255,255,0.06);
     box-shadow: 0 6px 18px rgba(0,0,0,0.2) inset;
     backdrop-filter: blur(2px);
+    min-height: 42px; /* Fixed height to prevent layout shift */
   }
+  
+  .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  
+  .tech-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: linear-gradient(45deg, #06b6d4, #8b5cf6);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+  
+  .tech-particle-1 { top: 20%; left: 10%; animation: tech-particle-float 5s ease-in-out infinite; }
+  .tech-particle-2 { top: 70%; left: 30%; animation: tech-particle-float 4s ease-in-out infinite 1s; }
+  .tech-particle-3 { top: 40%; right: 20%; animation: tech-particle-float 6s ease-in-out infinite 2s; }
+  .tech-particle-4 { top: 80%; right: 40%; animation: tech-particle-float 4.5s ease-in-out infinite 0.5s; }
+  
   @keyframes tech-scroll {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
+  }
+  
+  @keyframes tech-particle-float {
+    0%, 100% { transform: translateY(0px) opacity(0.6); }
+    50% { transform: translateY(-15px) opacity(1); }
   }
 </style>

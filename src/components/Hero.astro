@@ -1,41 +1,210 @@
-<section id="home" class="mx-auto flex max-w-6xl flex-col-reverse gap-10 lg:flex-row lg:items-center">
-  <div class="flex-1" data-reveal>
-    <p class="text-sm uppercase tracking-[0.4em] text-white/60">Analytics Engineer · Founder</p>
+<section id="home" class="hero-shell relative mx-auto flex max-w-6xl flex-col-reverse gap-10 overflow-hidden rounded-3xl border-2 border-gradient bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20 px-8 py-16 lg:flex-row lg:items-center md:px-12">
+  <!-- Animated background elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+  </div>
+  
+  <!-- Floating particles -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="hero-particle hero-particle-1"></div>
+    <div class="hero-particle hero-particle-2"></div>
+    <div class="hero-particle hero-particle-3"></div>
+    <div class="hero-particle hero-particle-4"></div>
+    <div class="hero-particle hero-particle-5"></div>
+    <div class="hero-particle hero-particle-6"></div>
+    <div class="hero-particle hero-particle-7"></div>
+    <div class="hero-particle hero-particle-8"></div>
+  </div>
+
+  <div class="relative z-10 flex-1" data-reveal>
+    <p class="text-sm uppercase tracking-[0.4em] text-white/70">Analytics Engineer · Founder</p>
     <h2 class="mt-6 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
       Hello and Welcome! I'm George Nizoridis.
     </h2>
-    <p class="mt-6 max-w-xl text-lg text-white/70">
+    <p class="mt-6 max-w-xl text-lg text-white/80">
       I'm an analytics engineer at Service Stream, passionate about building end to end data solutions, AI Engineering, and Game Development. I consistently deliver benefits to my team and stakeholders.
-      I'm also the founder of <a class="underline" href="https://boneheadlabs.org/" target="_blank" rel="noopener">Bonehead Labs</a>, my own software company producing video games, open source tools, and research.
+      I'm also the founder of <a class="underline decoration-blue-400 underline-offset-2 transition hover:decoration-purple-400" href="https://boneheadlabs.org/" target="_blank" rel="noopener">Bonehead Labs</a>, my own software company producing video games, open source tools, and research.
     </p>
     <div class="mt-10 flex flex-wrap items-center gap-4">
-      <a
-        class="rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-1 hover:bg-white/20"
-        href="#projects"
-      >
-        View work
+      <a class="hero-btn hero-btn-primary group" href="#projects">
+        <span class="relative z-10 flex items-center gap-2">
+          <iconify-icon icon="mdi:briefcase-variant" width="16" height="16"></iconify-icon>
+          View work
+          <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+        </span>
       </a>
-      <a
-        class="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/80 transition hover:-translate-y-1 hover:border-white/50 hover:text-white"
-        href="#bonehead"
-      >
-        Bonehead Labs
+      <a class="hero-btn hero-btn-secondary group" href="#bonehead">
+        <span class="relative z-10 flex items-center gap-2">
+          <iconify-icon icon="mdi:rocket-launch-outline" width="16" height="16"></iconify-icon>
+          Bonehead Labs
+          <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">↗</span>
+        </span>
       </a>
-      <a
-        class="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/70 transition hover:-translate-y-1 hover:border-white/50 hover:text-white"
-        href="#contact"
-      >
-        Contact
+      <a class="hero-btn hero-btn-secondary group" href="#contact">
+        <span class="relative z-10 flex items-center gap-2">
+          <iconify-icon icon="mdi:message-text" width="16" height="16"></iconify-icon>
+          Contact
+          <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">↗</span>
+        </span>
       </a>
     </div>
-    
   </div>
-  <div class="flex-1" data-reveal>
-    <figure class="relative mx-auto max-w-md md:max-w-lg overflow-hidden rounded-[3rem] border border-white/10 shadow-glow">
+  
+  <div class="relative z-10 flex-1" data-reveal>
+    <figure class="portrait-container relative mx-auto max-w-md md:max-w-lg overflow-hidden rounded-[3rem] border-2 border-white/20 shadow-glow">
       <img src="/images/Main_Portrait.webp" alt="Portrait of George Nizoridis" class="w-full object-cover" loading="lazy" />
-      <figcaption class="absolute bottom-6 left-0 right-0 mx-auto flex max-w-[80%] items-center justify-between rounded-full bg-black/50 px-4 py-3 text-xs uppercase tracking-[0.3em] text-white">
+      <figcaption class="absolute bottom-6 left-0 right-0 mx-auto flex max-w-[80%] items-center justify-between rounded-full bg-gradient-to-r from-blue-500/80 to-purple-500/80 backdrop-blur-sm px-4 py-3 text-xs uppercase tracking-[0.3em] text-white shadow-lg">
         Developer  · Founder  · Creative
       </figcaption>
     </figure>
   </div>
 </section>
+
+<style>
+  .hero-shell {
+    animation: hero-pulse 6s ease-in-out infinite;
+  }
+  
+  .border-gradient {
+    border-color: rgba(59, 130, 246, 0.4);
+  }
+  
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+  }
+  
+  .hero-orb-1 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+    top: -80px;
+    left: -80px;
+    animation: hero-float-1 12s ease-in-out infinite;
+  }
+  
+  .hero-orb-2 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    bottom: -60px;
+    right: -60px;
+    animation: hero-float-2 10s ease-in-out infinite reverse;
+  }
+  
+  .hero-orb-3 {
+    width: 160px;
+    height: 160px;
+    background: linear-gradient(90deg, #1d4ed8, #7c3aed);
+    top: 50%;
+    right: 20%;
+    animation: hero-float-3 14s ease-in-out infinite;
+  }
+  
+  .hero-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+  
+  .hero-particle-1 { top: 15%; left: 15%; animation: hero-particle-float 4s ease-in-out infinite; }
+  .hero-particle-2 { top: 25%; right: 20%; animation: hero-particle-float 3.5s ease-in-out infinite 0.5s; }
+  .hero-particle-3 { bottom: 30%; left: 25%; animation: hero-particle-float 4.2s ease-in-out infinite 1s; }
+  .hero-particle-4 { top: 60%; right: 15%; animation: hero-particle-float 3.8s ease-in-out infinite 1.5s; }
+  .hero-particle-5 { bottom: 20%; right: 30%; animation: hero-particle-float 4.5s ease-in-out infinite 0.8s; }
+  .hero-particle-6 { top: 40%; left: 10%; animation: hero-particle-float 3.2s ease-in-out infinite 2s; }
+  .hero-particle-7 { top: 70%; left: 60%; animation: hero-particle-float 3.9s ease-in-out infinite 0.3s; }
+  .hero-particle-8 { top: 10%; right: 40%; animation: hero-particle-float 4.1s ease-in-out infinite 1.8s; }
+  
+  .hero-btn {
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  
+  .hero-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  
+  .hero-btn:hover::before {
+    transform: translateX(100%);
+  }
+  
+  .hero-btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+  
+  .hero-btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+  }
+  
+  .hero-btn-secondary {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+  }
+  
+  .hero-btn-secondary:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+  }
+  
+  .portrait-container {
+    animation: portrait-glow 3s ease-in-out infinite alternate;
+  }
+  
+  @keyframes hero-pulse {
+    0%, 100% { border-color: rgba(59, 130, 246, 0.4); }
+    50% { border-color: rgba(139, 92, 246, 0.6); }
+  }
+  
+  @keyframes hero-float-1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(40px, -30px) rotate(120deg); }
+    66% { transform: translate(-30px, 40px) rotate(240deg); }
+  }
+  
+  @keyframes hero-float-2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-50px, -40px) rotate(180deg); }
+  }
+  
+  @keyframes hero-float-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -50px) scale(1.1); }
+  }
+  
+  @keyframes hero-particle-float {
+    0%, 100% { transform: translateY(0px) opacity(0.8); }
+    50% { transform: translateY(-25px) opacity(1); }
+  }
+  
+  @keyframes portrait-glow {
+    0% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); }
+    100% { box-shadow: 0 0 50px rgba(139, 92, 246, 0.5); }
+  }
+</style>
