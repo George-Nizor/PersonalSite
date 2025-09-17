@@ -7,7 +7,7 @@ const techItems: { label: string; icon: string }[] = [
   { label: 'Lakehouses', icon: 'mdi:warehouse' },
   { label: 'Dataflows', icon: 'mdi:source-branch' },
   { label: 'Pipelines', icon: 'mdi:pipe' },
-  { label: 'Microsoft Fabric', icon: 'simple-icons:microsoftfabric' },
+  { label: 'Microsoft Fabric', icon: 'mdi:microsoft' },
   { label: 'AWS SageMaker', icon: 'simple-icons:amazonsagemaker' },
   { label: 'AWS Bedrock', icon: 'mdi:mountain' },
   { label: 'Azure OpenAI', icon: 'logos:microsoft-azure' },
@@ -34,8 +34,8 @@ const techItems: { label: string; icon: string }[] = [
       <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0b0b0c] to-transparent"></div>
       <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0b0b0c] to-transparent"></div>
 
-      <div class="tech-scroller">
-        <div class="tech-track">
+      <div class="tech-scroller will-change-transform">
+        <div class="tech-track" aria-hidden="false">
           {techItems.map((item) => (
             <div class="tech-pill">
               <iconify-icon icon={item.icon} width="22" height="22" class="text-white/90"></iconify-icon>

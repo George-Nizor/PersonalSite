@@ -17,6 +17,20 @@ body {
   min-height: 100vh;
 }
 
+/* Subtle animated grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
+  mask-image: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,0.6), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
 main {
   @apply md:px-12 lg:px-20;
 }
