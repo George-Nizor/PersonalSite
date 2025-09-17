@@ -1,0 +1,38 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+---
+<BaseLayout page="blog" title="Blog · George Nizoridis" description="Field notes on analytics engineering, AI experiments, and product craft.">
+  <section class="mx-auto max-w-5xl" data-reveal>
+    <header class="section-shell px-8 py-12 text-center">
+      <p class="text-xs uppercase tracking-[0.4em] text-sand/60">Ideas in Motion</p>
+      <h1 class="mt-4 text-4xl font-bold text-white">Blog</h1>
+      <p class="mx-auto mt-4 max-w-2xl text-base text-sand/70">
+        Essays, launch notes, and behind-the-scenes explorations of how analytics systems, AI agents, and data storytelling collide.
+      </p>
+    </header>
+  </section>
+  <section class="mx-auto mt-16 grid max-w-5xl gap-8" data-reveal>
+    {posts.map((post) => (
+      <article class="rounded-3xl border border-white/10 bg-white/5 p-8 transition hover:border-accent/40 hover:bg-white/10">
+        <p class="text-xs uppercase tracking-[0.3em] text-sand/50">{post.data.publishDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+        <h2 class="mt-3 text-3xl font-semibold text-white">
+          <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+        </h2>
+        <p class="mt-3 text-sm text-sand/70">{post.data.description}</p>
+        <div class="mt-4 flex flex-wrap gap-2 text-xs text-sand/60">
+          {post.data.tags.map((tag) => (
+            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">{tag}</span>
+          ))}
+        </div>
+      </article>
+    ))}
+    {posts.length === 0 && (
+      <p class="text-center text-sm text-sand/60">Add a Markdown file to <code>src/content/blog</code> to publish a post.</p>
+    )}
+  </section>
+</BaseLayout>

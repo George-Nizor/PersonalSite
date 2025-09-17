@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import revealScript from '../scripts/reveal.ts?raw';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  page?: string;
+}
+
+const { title = 'George Nizoridis · Analytics Engineer', description = 'Analytics engineer blending data models, AI, and storytelling.', page } = Astro.props as Props;
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="relative min-h-screen">
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <span class="motion-orb"></span>
+      <span class="motion-orb"></span>
+      <span class="motion-orb"></span>
+    </div>
+    <Navigation active={page} />
+    <main class="px-6 pb-20 pt-28 md:px-10 lg:px-16">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline type="module">{revealScript}</script>
+    <script is:inline>
+      const sections = ['home','about','tech','projects','bonehead','contact'];
+      const links = new Map();
+      document.querySelectorAll('nav a').forEach((a) => {
+        const id = sections.find((s) => a.getAttribute('href')?.includes(`#${s}`));
+        if (id) links.set(id, a);
+      });
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute('id');
+          if (!id || !sections.includes(id)) return;
+          const link = links.get(id);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            link.classList.add('text-white');
+          } else {
+            link.classList.remove('text-white');
+          }
+        });
+      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0.01 });
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    </script>
+  </body>
+</html>

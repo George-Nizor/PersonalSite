@@ -1,0 +1,39 @@
+---
+const { active } = Astro.props as { active?: string };
+const links = [
+  { href: '/', label: 'Home', id: 'home' },
+  { href: '/#about', label: 'About', id: 'about' },
+  { href: '/#tech', label: 'Tech', id: 'tech' },
+  { href: '/#projects', label: 'Projects', id: 'projects' },
+  { href: '/#bonehead', label: 'Bonehead', id: 'bonehead' },
+  { href: '/#contact', label: 'Contact', id: 'contact' },
+  { href: '/blog', label: 'Blog', id: 'blog' }
+];
+---
+<header class="fixed inset-x-0 top-0 z-30 px-6 py-5 md:px-10 lg:px-16">
+  <div class="glass mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/10 bg-black/40 px-6 py-3">
+    <a href="/" class="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em] text-white/70 transition hover:text-white">
+      <span class="h-10 w-10 overflow-hidden rounded-full border border-white/20">
+        <img src="/images/Main_Portrait.webp" alt="George Nizoridis" class="h-full w-full object-cover" loading="lazy" />
+      </span>
+      George Nizoridis
+    </a>
+    <nav>
+      <ul class="flex items-center gap-4 text-sm font-medium text-white/70 md:gap-6">
+        {links.map((link) => (
+          <li>
+            <a
+              class={`relative px-2 py-1 transition hover:text-white ${
+                active === link.id ? 'text-white' : ''
+              }`}
+              href={link.href}
+            >
+              {active === link.id && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

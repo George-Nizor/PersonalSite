@@ -1,0 +1,145 @@
+---
+const fetchRepo = async (fullName: string) => {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${fullName}`);
+    if (!res.ok) return null;
+    return (await res.json()) as any;
+  } catch {
+    return null;
+  }
+};
+
+const reposToFetch = [
+  'George-Nizor/Binary-Image-Classification',
+  'George-Nizor/ML-Project-Heart-attack',
+  'Bonehead-Labs/frontier-model-framework',
+  'Bonehead-Labs/PBIP-Factory',
+  'Bonehead-Labs/BoneheadLabsSite',
+  'Bonehead-Labs/bonehead-labs-official-systems'
+];
+
+const repoData = await Promise.all(reposToFetch.map(fetchRepo));
+
+const getImageFor = (repo: any) => (repo?.owner?.login === 'Bonehead-Labs' ? '/images/Bonehead-labs-banner.png' : '/images/Secondary_Portrait.webp');
+---
+<section id="projects" class="mx-auto mt-24 max-w-6xl">
+  <div class="section-shell relative border-2 border-white/20 px-8 py-12 md:px-12" data-reveal>
+    <header class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h2 class="text-3xl font-semibold text-white md:text-4xl">My Projects</h2>
+        <p class="mt-2 max-w-2xl text-white/70">A fuller list of things I've built or shipped. Click to expand and scroll through.</p>
+      </div>
+      <button id="toggle-projects" class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white">
+        <span id="toggle-text">Show projects</span> <span id="toggle-icon">↓</span>
+      </button>
+    </header>
+
+    <div id="projects-container" class="mt-8 hidden overflow-hidden rounded-xl border border-white/10 bg-white/5" data-reveal>
+      <div class="flex items-center justify-between border-b border-white/10 px-4 py-2 text-xs text-white/60">
+        <span>Scroll to see all projects</span>
+        <span id="project-counter">1 of 10</span>
+      </div>
+      <div id="projects-list" class="h-96 space-y-4 overflow-y-auto p-4" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.3) transparent;">
+        <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
+            <img src="/images/Secondary_Portrait.webp" alt="AI evidence validation" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex-1">
+            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · AI</p>
+            <h3 class="mt-1 text-lg font-semibold text-white">🔒 A.I Evidence Validation</h3>
+            <p class="mt-1 text-sm text-white/75">Multi‑modal LLM system that assesses evidence against complex requirements at scale.</p>
+          </div>
+        </article>
+
+        <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
+            <img src="/images/Secondary_Portrait.webp" alt="AI invoice data extraction" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex-1">
+            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · AI</p>
+            <h3 class="mt-1 text-lg font-semibold text-white">🔒 A.I Invoice Data Extraction</h3>
+            <p class="mt-1 text-sm text-white/75">AWS Rekognition + Bedrock to analyse and extract invoice data into a structured database.</p>
+          </div>
+        </article>
+
+        {repoData.map((repo) => (
+          <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
+              <img src={getImageFor(repo)} alt="{repo?.name ?? 'Repository'} image" class="h-full w-full object-cover" loading="lazy" />
+            </div>
+            <div class="flex-1">
+              <p class="text-xs uppercase tracking-[0.3em] text-white/50">{repo?.owner?.login ?? 'GitHub'}</p>
+              <h3 class="mt-1 text-lg font-semibold text-white">{repo?.name ?? 'Repository'}</h3>
+              <p class="mt-1 text-sm text-white/75">{repo?.description ?? 'Open‑source project.'}</p>
+              <div class="mt-2 flex flex-wrap gap-2 text-xs text-white/70">
+                {repo?.language && <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">{repo.language}</span>}
+                {repo?.stargazers_count !== undefined && (<span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">★ {repo.stargazers_count}</span>)}
+                {repo?.html_url && (
+                  <a class="inline-flex items-center gap-1 text-white/80 hover:text-white" href={repo.html_url} target="_blank" rel="noopener">GitHub ↗</a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+
+        <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
+            <img src="/images/Secondary_Portrait.webp" alt="Medallion architecture" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex-1">
+            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · Architecture</p>
+            <h3 class="mt-1 text-lg font-semibold text-white">🏛️ Medallion Architecture</h3>
+            <p class="mt-1 text-sm text-white/75">Pioneered a Fabric medallion architecture at Service Stream using lakehouses, dataflows, and notebooks (Spark SQL, T‑SQL, PySpark, Python).</p>
+          </div>
+        </article>
+
+        <article class="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-white/10">
+            <img src="/images/Secondary_Portrait.webp" alt="Data modelling" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex-1">
+            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Private · Data Modeling</p>
+            <h3 class="mt-1 text-lg font-semibold text-white">🧩 Data Modelling</h3>
+            <p class="mt-1 text-sm text-white/75">DirectLake semantic models to unify and distribute complex datasets to business users with governed metrics.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    const btn = document.getElementById('toggle-projects');
+    const container = document.getElementById('projects-container');
+    const list = document.getElementById('projects-list');
+    const icon = document.getElementById('toggle-icon');
+    const text = document.getElementById('toggle-text');
+    const counter = document.getElementById('project-counter');
+    
+    if (btn && container && list && icon && text) {
+      let open = false;
+      
+      btn.addEventListener('click', () => {
+        open = !open;
+        container.classList.toggle('hidden', !open);
+        icon.textContent = open ? '↑' : '↓';
+        text.textContent = open ? 'Hide projects' : 'Show projects';
+      });
+      
+      // Update scroll counter
+      if (list && counter) {
+        const articles = list.querySelectorAll('article');
+        const totalProjects = articles.length;
+        
+        const updateCounter = () => {
+          const scrollTop = list.scrollTop;
+          const articleHeight = articles[0]?.offsetHeight + 16; // article height + gap
+          const visibleIndex = Math.floor(scrollTop / articleHeight) + 1;
+          counter.textContent = `${Math.min(visibleIndex, totalProjects)} of ${totalProjects}`;
+        };
+        
+        list.addEventListener('scroll', updateCounter);
+        updateCounter();
+      }
+    }
+  </script>
+</section>

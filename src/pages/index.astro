@@ -1,0 +1,27 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Hero from '~/components/Hero.astro';
+import About from '~/components/About.astro';
+import TechStack from '~/components/TechStack.astro';
+import BoneheadShowcase from '~/components/BoneheadShowcase.astro';
+import Experience from '~/components/Experience.astro';
+import Projects from '~/components/Projects.astro';
+import Contact from '~/components/Contact.astro';
+import LatestPosts from '~/components/LatestPosts.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 2);
+---
+<BaseLayout page="home" description="Portfolio of George Nizoridis—analytics engineer, AI tinkerer, and founder of Bonehead Labs.">
+  <Hero />
+  <About />
+  <TechStack />
+  <Projects />
+  <BoneheadShowcase />
+  <LatestPosts posts={posts} />
+  <Contact />
+</BaseLayout>

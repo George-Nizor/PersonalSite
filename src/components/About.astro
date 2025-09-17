@@ -1,0 +1,54 @@
+---
+import { coreStacks, coreLanguages } from '~/data/skills';
+---
+<section id="about" class="mx-auto mt-24 max-w-6xl">
+  <div class="section-shell px-8 py-12 md:px-12" data-reveal>
+    <div class="flex flex-col gap-12 lg:flex-row">
+      <div class="max-w-xl flex-1">
+        <h2 class="text-3xl font-semibold text-white md:text-4xl">About</h2>
+        <p class="mt-6 text-base text-white/70">
+          I'm George Nizoridis—Analytics Engineer in Melbourne. I build end‑to‑end data solutions in Microsoft Fabric
+          (dataflows, pipelines, lakehouses), design Power BI with strong UX, and develop ML/LLM tools that automate analysis.
+        </p>
+        <p class="mt-4 text-base text-white/70">
+          At Service Stream, I delivered 20+ reports across finance, H&S, fleet, sustainability, legal, and risk, uplifted
+          standards with reusable templates, and integrated ERP data for dynamic executive dashboards. I also prototype
+          agents and CNN/ML models to reduce manual effort.
+        </p>
+        <div class="mt-6 text-sm text-white/60">
+          <a class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 transition hover:border-white/60 hover:text-white" href="/blog">
+            Read the latest thinking <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+      <div class="flex-1 space-y-10">
+        <div>
+          <h3 class="text-xs uppercase tracking-[0.3em] text-white/60">What I Focus On</h3>
+          <div class="mt-5 grid gap-4 md:grid-cols-2">
+            {coreStacks.map((stack) => (
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p class="flex items-center gap-2 text-sm font-semibold text-white">
+                  <span aria-hidden="true">{stack.label.includes('Machine') ? '🤖' : stack.label.includes('Analytics') || stack.label.includes('BI') ? '📊' : stack.label.includes('Data') ? '🗂️' : '🧰'}</span>
+                  {stack.label}
+                </p>
+                <ul class="mt-3 space-y-2 text-xs text-white/70">
+                  {stack.tools.map((tool) => (
+                    <li>• {tool}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xs uppercase tracking-[0.3em] text-white/60">Core Languages</h3>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs text-white/70">
+            {coreLanguages.map((item) => (
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">{item === 'Python' ? '🐍 Python' : item === 'SQL' ? '🧮 SQL' : '🎮 Godot/GDScript'}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
