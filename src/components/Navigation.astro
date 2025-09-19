@@ -1,15 +1,7 @@
 ---
 const { active } = Astro.props as { active?: string };
-const links = [
-  { href: '/', label: 'Home', id: 'home', icon: 'mdi:home-outline' },
-  { href: '/#about', label: 'About', id: 'about', icon: 'mdi:account-outline' },
-  { href: '/#tech', label: 'Tech', id: 'tech', icon: 'mdi:chip' },
-  { href: '/#projects', label: 'Projects', id: 'projects', icon: 'mdi:folder-star-outline' },
-  { href: '/#bonehead', label: 'Bonehead Labs', id: 'bonehead', hasLogo: true },
-  { href: '/#contact', label: 'Contact', id: 'contact', icon: 'mdi:message-text' },
-  { href: '/blog', label: 'Blog', id: 'blog', icon: 'mdi:book-open-page-variant-outline' }
-];
 ---
+
 <header class="fixed inset-x-0 top-0 z-30 px-6 py-5 md:px-10 lg:px-16">
   <div class="glass mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/10 bg-black/40 px-6 py-3">
     <a href="/" class="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em] text-white/70 transition hover:text-white">
@@ -19,25 +11,120 @@ const links = [
       George Nizoridis
     </a>
     <nav>
-      <ul class="flex items-center gap-4 text-sm font-medium text-white/70 md:gap-6">
-        {links.map((link) => (
-          <li>
-            <a
-              class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
-                active === link.id ? 'text-white' : ''
-              }`}
-              href={link.href}
-            >
-              {active === link.id && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
-              {link.hasLogo ? (
-                <img src="/images/bonehead_labs_logo.png" alt="Bonehead Labs" class="h-4 w-4 rounded object-contain" loading="lazy" />
-              ) : link.icon && (
-                <iconify-icon icon={link.icon} width="16" height="16" class="text-white/60"></iconify-icon>
-              )}
-              {link.label}
-            </a>
-          </li>
-        ))}
+      {/* Mobile navigation - only Home and Blog */}
+      <ul class="flex items-center gap-4 text-sm font-medium text-white/70 md:hidden">
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'home' ? 'text-white' : ''
+            }`}
+            href="/"
+          >
+            {active === 'home' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:home-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            Home
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'blog' ? 'text-white' : ''
+            }`}
+            href="/blog"
+          >
+            {active === 'blog' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:book-open-page-variant-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            Blog
+          </a>
+        </li>
+      </ul>
+      
+      {/* Desktop navigation - all links */}
+      <ul class="hidden items-center gap-4 text-sm font-medium text-white/70 md:flex md:gap-6">
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'home' ? 'text-white' : ''
+            }`}
+            href="/"
+          >
+            {active === 'home' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:home-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            Home
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'about' ? 'text-white' : ''
+            }`}
+            href="/#about"
+          >
+            {active === 'about' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:account-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            About
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'tech' ? 'text-white' : ''
+            }`}
+            href="/#tech"
+          >
+            {active === 'tech' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:chip" width="16" height="16" class="text-white/60"></iconify-icon>
+            Tech
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'projects' ? 'text-white' : ''
+            }`}
+            href="/#projects"
+          >
+            {active === 'projects' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:folder-star-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            Projects
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'bonehead' ? 'text-white' : ''
+            }`}
+            href="/#bonehead"
+          >
+            {active === 'bonehead' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <img src="/images/bonehead_labs_logo.png" alt="Bonehead Labs" class="h-4 w-4 rounded object-contain" loading="lazy" />
+            Bonehead Labs
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'contact' ? 'text-white' : ''
+            }`}
+            href="/#contact"
+          >
+            {active === 'contact' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:message-text" width="16" height="16" class="text-white/60"></iconify-icon>
+            Contact
+          </a>
+        </li>
+        <li>
+          <a
+            class={`relative flex items-center gap-2 px-2 py-1 transition hover:text-white ${
+              active === 'blog' ? 'text-white' : ''
+            }`}
+            href="/blog"
+          >
+            {active === 'blog' && <span class="absolute inset-x-1 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent"></span>}
+            <iconify-icon icon="mdi:book-open-page-variant-outline" width="16" height="16" class="text-white/60"></iconify-icon>
+            Blog
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
